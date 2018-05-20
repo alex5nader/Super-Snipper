@@ -1,0 +1,132 @@
+﻿<Window x:Class="ScreenshotApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ScreenshotApp"
+        xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:function="clr-namespace:Function;assembly=Function"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Super Snipper" Height="400" Width="600" Icon="Icon.ico"
+        ResizeMode="CanMinimize">
+    <Window.Resources>
+        <RoutedUICommand x:Key="New"/>
+        <RoutedUICommand x:Key="IncrementDelay"/>
+        <RoutedUICommand x:Key="DecrementDelay"/>
+        <RoutedUICommand x:Key="ShowHelpWindow"/>
+        <RoutedUICommand x:Key="SaveAll"/>
+
+        <!--Needed to make any ItemsControl scroll horizontally-->
+        <Style TargetType="ItemsControl">
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <system:Int32 x:Key="SpanAll">2147483647</system:Int32>
+    </Window.Resources>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource New}" Executed="BtnNew_OnClick"/>
+        <CommandBinding Command="{StaticResource IncrementDelay}" Executed="IncrementDelay"/>
+        <CommandBinding Command="{StaticResource DecrementDelay}" Executed="DecrementDelay"/>
+        <CommandBinding Command="{StaticResource ShowHelpWindow}" Executed="ShowHelpWindow"/>
+        <CommandBinding Command="{StaticResource SaveAll}" Executed="SaveAll"/>
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Alt" Command="{StaticResource New}"/>
+        <KeyBinding Key="Up"   Command="{StaticResource IncrementDelay}"/>
+        <KeyBinding Key="Down" Command="{StaticResource DecrementDelay}"/>
+        <KeyBinding Key="F1" Command="{StaticResource ShowHelpWindow}"/>
+        <KeyBinding Key="S" Modifiers="Control" Command="{StaticResource SaveAll}"/>
+    </Window.InputBindings>
+
+    <DockPanel Name="MainDockPanel">
+        <ToolBar Height="35" DockPanel.Dock="Top" ToolBarTray.IsLocked="True" Margin="2,0">
+            <!--New Button-->
+            <Button Name="BtnNew" ToolTip="Create a new snip"
+                    HorizontalAlignment="Left"
+                    Command="{StaticResource New}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Icon.ico"
+                           Margin="0,0,2,0"
+                           Stretch="Fill"/>
+                    <TextBlock Margin="2,0,0,0"
+                               VerticalAlignment="Center">
+                        <Underline>N</Underline>ew
+                    </TextBlock>
+                </StackPanel>
+            </Button>
+
+            <Separator/>
+
+            <!--Delay-->
+            <StackPanel ToolTip="Add a delay before the snip is taken" Orientation="Horizontal" Margin="2,0">
+                <Image Source="Icon.ico"
+                       Width="24" Height="24"/>
+                <Label Content="Delay:" VerticalAlignment="Center"/>
+                <toolkit:IntegerUpDown Name="IudDelay" FormatString="" DefaultValue="0" Value="0"
+                                       Minimum="0" Maximum="5"
+                                       Height="20" Width="35"
+                                       FontSize="12" TextAlignment="Left"/>
+            </StackPanel>
+
+            <Separator/>
+            
+            <Button Name="BtnSaveAll" ToolTip="Save all snips"
+                    HorizontalAlignment="Left"
+                    Command="{StaticResource SaveAll}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Icon.ico"
+                           Margin="0,0,2,0"
+                           Stretch="Fill"/>
+                    <Label Content="Save All" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </ToolBar>
+        <ScrollViewer Name="SvSnips" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden"
+                      PreviewMouseWheel="SvSnips_OnPreviewMouseWheel">
+            <ItemsControl Name="IcScreenshots">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="function:Snip">
+                        <Grid Name="SnipDisplay">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="275"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Image Source="{Binding BitmapImageScreenshot}" Stretch="None"
+                                   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="{StaticResource SpanAll}" Margin="5,10"
+                                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <Image.InputBindings>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding PreviewCommand}" CommandParameter="{Binding}"/>
+                                </Image.InputBindings>
+                            </Image>
+                            <Button Grid.Row="1" Grid.Column="0"
+                                    Margin="5,0,5,10"
+                                    Command="{Binding SaveCommand}">Save</Button>
+                            <Button Grid.Row="1" Grid.Column="1"
+                                    Margin="5,0,5,10"
+                                    Command="{Binding CopyCommand}" CommandParameter="{Binding}">Copy</Button>
+                            <Button Grid.Row="1" Grid.Column="2"
+                                    Margin="5,0,5,10"
+                                    Command="{Binding RemoveCommand}">Remove</Button>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</Window>
+
