@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Drawing;
 
-namespace Function {
+namespace Function.Util {
 
     /// <summary>
     /// Represents a rectangle with top-left and bottom-right coordinates

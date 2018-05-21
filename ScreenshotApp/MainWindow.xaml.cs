@@ -20,6 +20,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using Function;
+using Function.Snip;
+using Function.Util;
 using Clipboard = System.Windows.Clipboard;
 
 namespace ScreenshotApp {

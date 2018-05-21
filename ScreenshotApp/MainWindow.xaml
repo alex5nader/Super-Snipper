@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScreenshotApp"
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:function="clr-namespace:Function;assembly=Function"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:snip="clr-namespace:Function.Snip;assembly=Function"
         mc:Ignorable="d"
         Title="Super Snipper" Height="400" Width="600" Icon="Icon.ico"
         ResizeMode="CanMinimize">
@@ -94,7 +94,7 @@
                       PreviewMouseWheel="SvSnips_OnPreviewMouseWheel">
             <ItemsControl Name="IcScreenshots">
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="function:Snip">
+                    <DataTemplate DataType="snip:Snip">
                         <Grid Name="SnipDisplay">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>

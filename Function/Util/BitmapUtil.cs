@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
-namespace Function {
+namespace Function.Util {
 
     public static class BitmapUtil {
 

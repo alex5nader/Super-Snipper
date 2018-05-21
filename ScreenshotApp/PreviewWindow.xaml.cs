@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Function;
+using Function.Snip;
 using Console = System.Console;
 
 namespace ScreenshotApp {

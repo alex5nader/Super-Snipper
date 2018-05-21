@@ -3,13 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using Function.Util;
 
-using Function;
-
-namespace Function {
+namespace Function.Snip {
 
     public class SnipQueue : IReadOnlyCollection<Snip>, INotifyCollectionChanged {
 

@@ -16,6 +16,8 @@ using System.Timers;
 using FormsControl = System.Windows.Forms.Control;
 
 using Function;
+using Function.Snip;
+using Function.Util;
 
 namespace ScreenshotApp {
     /// <summary>
