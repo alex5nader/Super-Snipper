@@ -69,7 +69,8 @@ namespace ScreenshotApp {
             var newTop = _showingDecoration
                 ? Top + TitleBarHeight
                 : Top - TitleBarHeight;
-            var newWindow = new PreviewWindow(_toPreview, newLeft, newTop, !_showingDecoration);
+            var newWindow =
+                new PreviewWindow(_toPreview, newLeft, newTop, !_showingDecoration) {WindowClosed = WindowClosed};
             newWindow.Show();
             Close();
         }

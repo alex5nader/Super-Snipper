@@ -8,14 +8,14 @@ using Size = System.Drawing.Size;
 
 namespace Function.Util {
 
-    public static class BitmapUtil {
+    public static class ImageUtil {
 
-        public static Bitmap Crop(this Bitmap bmp, Rectangle cropArea) {
-            var newBmp = new Bitmap(bmp);
-            return newBmp.Clone(cropArea, bmp.PixelFormat);
+        public static Image Crop(this Image img, Rectangle cropArea) {
+            var bmp = new Bitmap(img);
+            return bmp.Clone(cropArea, img.PixelFormat);
         }
 
-        public static Bitmap TakeScreenshot(Box bounds) {
+        public static Image TakeScreenshot(Box bounds) {
             using (var bmp = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format32bppArgb)) {
                 using (var g = Graphics.FromImage(bmp)) {
                     g.CopyFromScreen(bounds.TopLeft, Point.Empty, bounds.Size, CopyPixelOperation.SourceCopy);
@@ -25,9 +25,9 @@ namespace Function.Util {
             }
         }
 
-        public static BitmapImage ToBitmapImage(this Bitmap bmp) {
+        public static BitmapImage ToBitmapImage(this Image img) {
             using (var mem = new MemoryStream()) {
-                bmp.Save(mem, ImageFormat.Bmp);
+                img.Save(mem, ImageFormat.Bmp);
                 mem.Position = 0;
 
                 var output = new BitmapImage();
@@ -39,6 +39,11 @@ namespace Function.Util {
 
                 return output;
             }
+        }
+
+        public static byte[] ToByteArray(this Image img) {
+            var converter = new ImageConverter();
+            return (byte[]) converter.ConvertTo(img, typeof(byte[]));
         }
 
         public static ImageFormat ToImageFormat(this string str) {

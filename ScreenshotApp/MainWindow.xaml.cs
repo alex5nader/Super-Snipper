@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -23,6 +25,8 @@ using Function;
 using Function.Snip;
 using Function.Util;
 using Clipboard = System.Windows.Clipboard;
+using MessageBox = System.Windows.MessageBox;
+using MessageBoxResult = System.Windows.MessageBoxResult;
 
 namespace ScreenshotApp {
     /// <summary>
@@ -118,20 +122,9 @@ namespace ScreenshotApp {
                 if (result != System.Windows.Forms.DialogResult.OK || string.IsNullOrWhiteSpace(path))
                     return;
 
-                var files = Directory.GetFiles(path);
-
-                foreach (var file in files) {
-                    Console.WriteLine(file);
-                }
-
                 var number = 1;
-                var warnAboutDuplicates = true;
                 foreach (var snip in _snips) {
-                    var savePath = path + $@"\Snip {number++}.png";
-                    if (File.Exists(savePath) && warnAboutDuplicates) {
-
-                    }
-                    snip.Screenshot.Save(savePath, ImageFormat.Png);
+                    snip.Screenshot.Save(path + $@"\Snip {number++}.png", ImageFormat.Png);
                 }
             }
         }
@@ -143,6 +136,13 @@ namespace ScreenshotApp {
                 SvSnips.LineRight();
             e.Handled = true;
             // 
+        }
+
+        private async void ImgurExport(object sender, ExecutedRoutedEventArgs e) {
+            //var url = await _snips[0].ImgurExport();
+            //var result = CustomMessageBox.Show();
+            //if (result == MessageBoxResult.OK)
+            //    Clipboard.SetDataObject(url);
         }
     }
 }

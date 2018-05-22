@@ -16,6 +16,7 @@
         <RoutedUICommand x:Key="DecrementDelay"/>
         <RoutedUICommand x:Key="ShowHelpWindow"/>
         <RoutedUICommand x:Key="SaveAll"/>
+        <RoutedUICommand x:Key="ImgurExport"/>
 
         <!--Needed to make any ItemsControl scroll horizontally-->
         <Style TargetType="ItemsControl">
@@ -37,6 +38,7 @@
         <CommandBinding Command="{StaticResource DecrementDelay}" Executed="DecrementDelay"/>
         <CommandBinding Command="{StaticResource ShowHelpWindow}" Executed="ShowHelpWindow"/>
         <CommandBinding Command="{StaticResource SaveAll}" Executed="SaveAll"/>
+        <CommandBinding Command="{StaticResource ImgurExport}" Executed="ImgurExport"/>
     </Window.CommandBindings>
 
     <Window.InputBindings>
@@ -78,7 +80,7 @@
             </StackPanel>
 
             <Separator/>
-            
+
             <Button Name="BtnSaveAll" ToolTip="Save all snips"
                     HorizontalAlignment="Left"
                     Command="{StaticResource SaveAll}">
@@ -86,7 +88,20 @@
                     <Image Source="Icon.ico"
                            Margin="0,0,2,0"
                            Stretch="Fill"/>
-                    <Label Content="Save All" VerticalAlignment="Center"/>
+                    <Label VerticalAlignment="Center">Save All</Label>
+                </StackPanel>
+            </Button>
+            
+            <Separator/>
+            
+            <Button Name="BtnImgurExport" ToolTip="Export a snip to Imgur"
+                    HorizontalAlignment="Left"
+                    Command="{StaticResource ImgurExport}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Images/Integration/imgur.jpg"
+                           Margin="0,0,2,0"
+                           Stretch="Fill"/>
+                    <Label Content="Export to Imgur" VerticalAlignment="Center" Height="Auto"></Label>
                 </StackPanel>
             </Button>
         </ToolBar>
@@ -102,8 +117,9 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="275"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="250"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
 
                             <Image Source="{Binding BitmapImageScreenshot}" Stretch="None"
@@ -122,6 +138,14 @@
                             <Button Grid.Row="1" Grid.Column="2"
                                     Margin="5,0,5,10"
                                     Command="{Binding RemoveCommand}">Remove</Button>
+                            <Image Source="Images/Integration/imgur.jpg"
+                                   Stretch="Uniform" StretchDirection="DownOnly"
+                                   Grid.Row="2" Grid.Column="0"
+                                   Margin="5,0,5,10">
+                                <Image.InputBindings>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding ImgurExportCommand}"/>
+                                </Image.InputBindings>
+                            </Image>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

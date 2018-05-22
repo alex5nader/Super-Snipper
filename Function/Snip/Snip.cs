@@ -1,10 +1,13 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Function.Integration;
 using Function.Util;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using Imgur.API.Models;
 
 namespace Function.Snip {
 
@@ -25,6 +28,10 @@ namespace Function.Snip {
         public ICommand RemoveCommand { get; set; }
         public ICommand PreviewCommand { get; set; }
         public ICommand CopyCommand { get; set; }
+        public ICommand ImgurExportCommand => new RelayCommand(
+            async param => await ImgurExport(),
+            param => Screenshot != null
+        );
 
         public BitmapImage BitmapImageScreenshot => Screenshot.ToBitmapImage();
         public Bitmap Screenshot { get; private set; }
@@ -47,11 +54,11 @@ namespace Function.Snip {
         /// <param name="bounds">The region to capture</param>
         public void TakeScreenshot(Box bounds) {
             Screenshot?.Dispose();
-            Screenshot = BitmapUtil.TakeScreenshot(bounds);
+            Screenshot = ImageUtil.TakeScreenshot(bounds) as Bitmap;
         }
 
         public void Crop(Box bounds) {
-            Screenshot = Screenshot.Crop(bounds.ToRectangle());
+            Screenshot = Screenshot.Crop(bounds.ToRectangle()) as Bitmap;
         }
 
         public void Save() {
@@ -62,8 +69,8 @@ namespace Function.Snip {
                 FileName = "Snip",
                 DefaultExt = ".png",
                 Filter = "PNG (*.png)|*.png|"
-                       + "BMP (*.bmp)|*.bmp|"
-                       + "JPEG (*.jpeg)|*.jpeg"
+                         + "BMP (*.bmp)|*.bmp|"
+                         + "JPEG (*.jpeg)|*.jpeg"
             };
 
             var result = dialogue.ShowDialog();
@@ -82,6 +89,12 @@ namespace Function.Snip {
 
         public void Dispose() {
             Screenshot.Dispose();
+        }
+
+        public async Task<string> ImgurExport() {
+            var image = await ImgurIntegration.UploadImage(Screenshot);
+            Debug.WriteLine(image.Link);
+            return image.Link;
         }
     }
 }
