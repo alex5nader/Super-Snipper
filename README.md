@@ -8,7 +8,7 @@ Super Snipper is a screenshot app for Windows that takes a screenshot of a regio
 2. Extract to wherever you like
 
 ### Usage
-The executable is called `ScreenshotApp.exe`
+The executable is called `SuperSnipper.exe`. Ignore the executable called `ScreenshotApp.exe`.
 - Press F1 for a (**WIP**) in-app help menu
 - Press alt+n or the *New* button to create a new snip
 - Use the arrow keys or the arrow buttons to add delay before a snip is taken
