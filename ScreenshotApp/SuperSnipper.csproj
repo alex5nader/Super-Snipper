@@ -167,31 +167,49 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\check mark.jpg" />
+    <Resource Include="Images\Icons\check mark.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\help.png" />
+    <Resource Include="Images\Icons\help.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\save.png" />
+    <Resource Include="Images\Icons\save.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\delay.png" />
+    <Resource Include="Images\Icons\delay.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\settings.png" />
+    <Resource Include="Images\Icons\settings.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\new.png" />
+    <Resource Include="Images\Icons\new.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\settings2.png" />
+    <Resource Include="Images\Icons\settings2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\export.png" />
+    <Resource Include="Images\Icons\export.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\save2.png" />
+    <Resource Include="Images\Icons\save2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\delay2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\help2.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Icons\clear.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Help\Delay.PNG" />
+    <Resource Include="Images\Help\Export.PNG" />
+    <Resource Include="Images\Help\Help.PNG" />
+    <Resource Include="Images\Help\NewButton.PNG" />
+    <Resource Include="Images\Help\SaveAll.PNG" />
+    <Resource Include="Images\Help\Settings.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,6 +8,8 @@ using Function.Snip;
 using Function.Util;
 using WPFCustomMessageBox;
 using Clipboard = System.Windows.Clipboard;
+using Cursors = System.Windows.Input.Cursors;
+using MessageBox = System.Windows.MessageBox;
 using MessageBoxResult = System.Windows.MessageBoxResult;
 
 namespace SuperSnipper {
@@ -33,47 +35,35 @@ namespace SuperSnipper {
             };
         }
 
-        public void PreviewSnip(Snip toPreview) {
-            if (toPreview is null)
+        private async void BtnNew_OnClick(object sender, RoutedEventArgs e) {
+            if (!(IudDelay.Value is int delay))
                 return;
 
-            Clipboard.SetDataObject(toPreview.BitmapImageScreenshot);
-            var previewWindow = new PreviewWindow(toPreview) {
-                Owner = GetWindow(this),
-                WindowClosed = window => _previews.Remove(window)
+            await Task.Delay(1000 * delay);
+
+            var snip = new Snip {
+                PreviewCommand = new RelayCommand(
+                    param => PreviewSnip(param as Snip),
+                    param => param is Snip
+                ),
+                CopyCommand = new RelayCommand(
+                    param => {
+                        if (param is Snip pSnip) {
+                            Clipboard.SetImage(pSnip.BitmapImageScreenshot);
+                        }
+                    },
+                    param => param is Snip
+                )
             };
-            _previews.Add(previewWindow);
-            previewWindow.Show();
-        }
 
-        private async void BtnNew_OnClick(object sender, RoutedEventArgs e) {
-            if (IudDelay.Value is int delay) {
-                await Task.Delay(1000 * delay);
+            snip.TakeScreenshot();
 
-                var snip = new Snip {
-                    PreviewCommand = new RelayCommand(
-                        param => PreviewSnip(param as Snip),
-                        param => param is Snip
-                    ),
-                    CopyCommand = new RelayCommand(
-                        param => {
-                            if (param is Snip pSnip) {
-                                Clipboard.SetImage(pSnip.BitmapImageScreenshot);
-                            }
-                        },
-                        param => param is Snip
-                    )
-                };
-
-                snip.TakeScreenshot();
-
-                Hide();
-                var screenshotTaker = new ScreenshotTaker(snip) {
-                    Enqueue = _snips.Enqueue
-                };
-                screenshotTaker.ShowDialog();
-                Show();
-            }
+            Hide();
+            var screenshotTaker = new ScreenshotTaker(snip) {
+                Enqueue = _snips.Enqueue
+            };
+            screenshotTaker.ShowDialog();
+            Show();
         }
 
         private void IncrementDelay(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs) {
@@ -122,8 +112,42 @@ namespace SuperSnipper {
             // 
         }
 
+        private bool _readyToExport = false;
+        private Snip _selectedSnip;
+
+        public void PreviewSnip(Snip toPreview) {
+            if (toPreview is null)
+                return;
+
+            _selectedSnip = toPreview;
+
+            if (_readyToExport) {
+                Cursor = Cursors.Wait;
+                _readyToExport = false;
+                return;
+            }
+
+            Clipboard.SetDataObject(toPreview.BitmapImageScreenshot);
+            var previewWindow = new PreviewWindow(toPreview) {
+                Owner = GetWindow(this),
+                WindowClosed = window => _previews.Remove(window)
+            };
+            _previews.Add(previewWindow);
+            previewWindow.Show();
+        }
+
         private async void ImgurExport(object sender, ExecutedRoutedEventArgs e) {
-            var url = await _snips[0].ImgurExport();
+            if (_snips.Count < 0)
+                return;
+
+            _readyToExport = true;
+            CustomMessageBox.ShowOK("Select a snip to export", "Export", "OK");
+            while (_selectedSnip is null)
+                await Task.Delay(25);
+
+            var url = await _selectedSnip.ImgurExport();
+            Cursor = Cursors.Arrow;
+            _selectedSnip = null;
             var result = CustomMessageBox.ShowYesNo(
                 $"Image exported successfully. URL is {url}",
                 "Success!",
@@ -137,6 +161,12 @@ namespace SuperSnipper {
         private void ShowSettingsWindow(object sender, ExecutedRoutedEventArgs e) {
             var settings = new Settings();
             settings.ShowDialog();
+        }
+
+        private void ClearSnips(object sender, ExecutedRoutedEventArgs e) {
+            var result = CustomMessageBox.ShowYesNo("Are you sure you want to clear all snips?", "Clear Conformation", "Yes", "No");
+            if (result == MessageBoxResult.Yes)
+                _snips.Clear();
         }
     }
 }

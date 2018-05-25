@@ -75,5 +75,12 @@ namespace Function.Snip {
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
         }
+
+        public void Clear() {
+            while (_snips.Count > 0) {
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, _snips[0], 0));
+                _snips.RemoveAt(0);
+            }
+        }
     }
 }

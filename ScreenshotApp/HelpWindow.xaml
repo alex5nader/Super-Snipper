@@ -5,8 +5,63 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SuperSnipper"
         mc:Ignorable="d"
-        Title="HelpWindow" Height="200" Width="400">
-    <Grid>
-        
-    </Grid>
+        Title="Help" Height="200" Width="400">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"></Setter>
+            <Setter Property="Margin" Value="2,0"/>
+        </Style>
+        <Style TargetType="Image">
+            <Setter Property="Stretch" Value="None"/>
+            <Setter Property="RenderOptions.BitmapScalingMode" Value="Fant"/>
+            <Setter Property="Margin" Value="0,0,2,0"/>
+        </Style>
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        </Style>
+    </Window.Resources>
+    <ScrollViewer>
+        <StackPanel>
+            <Border>
+                <DockPanel>
+                    <Image Source="Images/Help/NewButton.PNG"/>
+                    <TextBlock>
+                        To create a new snip, you can press the new
+                        button (pictured to the left), or press alt+n.
+                    </TextBlock>
+                </DockPanel>
+            </Border>
+            <Border>
+                <DockPanel>
+                    <Image Source="Images/Help/Delay.PNG"/>
+                    <TextBlock>
+                        To add a delay before a snip is taken, you
+                        can use the up and down arrows next to the
+                        number. The value shown represents seconds
+                        of delay. You can also use the arrow keys.
+                    </TextBlock>
+                </DockPanel>
+            </Border>
+            <Border>
+                <DockPanel>
+                    <Image Source="Images/Help/SaveAll.PNG"/>
+                    <TextBlock>
+                        To save all taken snips to the same folder,
+                        you can press the Save All button or ctrl+s.
+                    </TextBlock>
+                </DockPanel>
+            </Border>
+            <Border>
+                <DockPanel>
+                    <Image Source="Images/Help/Export.PNG"/>
+                    <TextBlock>
+                        To upload a snip to Imgur so you can send it
+                        with a link, press the Export to Imgur button.
+                    </TextBlock>
+                </DockPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
 </Window>
