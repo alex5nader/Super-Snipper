@@ -146,7 +146,7 @@
             
             <Separator/>
 
-            <Button ToolTip="Change the app's settings"
+            <!--<Button ToolTip="Change the app's settings"
                     Command="{StaticResource ShowSettingsWindow}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="Images/Icons/settings.png" RenderOptions.BitmapScalingMode="Fant"
@@ -155,7 +155,7 @@
                 </StackPanel>
             </Button>
 
-            <Separator/>
+            <Separator/>-->
 
             <Button Name="BtnHelp" ToolTip="Show the help window" HorizontalAlignment="Right" Command="{StaticResource ShowHelpWindow}">
                 <DockPanel HorizontalAlignment="Right">
