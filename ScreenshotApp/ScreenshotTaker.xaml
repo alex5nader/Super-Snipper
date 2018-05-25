@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SuperSnipper"
         mc:Ignorable="d"
         Title="ScreenshotTaker"
-        WindowStyle="None" ShowInTaskbar="False" AllowsTransparency="True" Background="Transparent" Topmost="False"
+        WindowStyle="None" ShowInTaskbar="False" AllowsTransparency="True" Background="Transparent" Topmost="True"
         PreviewMouseDown="StartDrawRect" PreviewMouseUp="StopDrawRect">
     <Grid Name="MainGrid">
         <Grid.RowDefinitions>
