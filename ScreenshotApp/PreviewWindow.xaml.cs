@@ -1,22 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Function;
 using Function.Snip;
-using Console = System.Console;
+using Clipboard = System.Windows.Clipboard;
 
-namespace ScreenshotApp {
+namespace SuperSnipper {
     /// <summary>
     /// Interaction logic for PreviewWindow.xaml
     /// </summary>
@@ -82,6 +71,14 @@ namespace ScreenshotApp {
         private void DragToMove(object sender, MouseButtonEventArgs e) {
             if (e.ChangedButton == MouseButton.Left)
                 DragMove();
+        }
+
+        private void SaveSnip(object sender, ExecutedRoutedEventArgs e) {
+            _toPreview.Save();
+        }
+
+        private void CopySnip(object sender, ExecutedRoutedEventArgs e) {
+            Clipboard.SetDataObject(_toPreview.BitmapImageScreenshot);
         }
     }
 }

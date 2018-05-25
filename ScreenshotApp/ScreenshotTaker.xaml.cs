@@ -1,25 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Timers;
-
-using FormsControl = System.Windows.Forms.Control;
-
-using Function;
 using Function.Snip;
 using Function.Util;
+using WPFCustomMessageBox;
+using FormsControl = System.Windows.Forms.Control;
 
-namespace ScreenshotApp {
+namespace SuperSnipper {
     /// <summary>
     /// Interaction logic for ScreenshotTaker.xaml
     /// </summary>
@@ -31,7 +21,7 @@ namespace ScreenshotApp {
         private readonly Snip _snip;
         private readonly Border _center;
 
-        private Box _cropRegion;
+        private BoxF _cropRegion;
 
         public ScreenshotTaker(Snip snip) {
             InitializeComponent();
@@ -60,7 +50,7 @@ namespace ScreenshotApp {
 
             MainGrid.Cursor = Cursors.Cross;
 
-            _timer = new Timer(50) {
+            _timer = new Timer(1) {
                 Enabled = false,
                 AutoReset = true,
             };
@@ -71,6 +61,12 @@ namespace ScreenshotApp {
             Activate();
         }
 
+        /// <summary>
+        /// For some reason the box is drawn 8 pixels too far up and left;
+        /// this variable accounts for that error in placement.
+        /// </summary>
+        private const int TopLeftOffset = 8;
+
         private void UpdateRect(object sender, ElapsedEventArgs e) {
             Application.Current.Dispatcher.Invoke(
                 delegate {
@@ -79,10 +75,10 @@ namespace ScreenshotApp {
                     _cropRegion.X2 = mousePos.X;
                     _cropRegion.Y2 = mousePos.Y;
 
-                    Row0.SetValue(RowDefinition.HeightProperty, new GridLength(_cropRegion.TopLeft.Y, GridUnitType.Pixel));
+                    Row0.SetValue(RowDefinition.HeightProperty, new GridLength(_cropRegion.TopLeft.Y + TopLeftOffset, GridUnitType.Pixel));
                     Row1.SetValue(RowDefinition.HeightProperty, new GridLength(_cropRegion.BottomRight.Y - _cropRegion.TopLeft.Y, GridUnitType.Pixel));
                     Row2.SetValue(RowDefinition.HeightProperty, new GridLength(1, GridUnitType.Star));
-                    Col0.SetValue(ColumnDefinition.WidthProperty, new GridLength(_cropRegion.TopLeft.X, GridUnitType.Pixel));
+                    Col0.SetValue(ColumnDefinition.WidthProperty, new GridLength(_cropRegion.TopLeft.X + TopLeftOffset, GridUnitType.Pixel));
                     Col1.SetValue(ColumnDefinition.WidthProperty, new GridLength(_cropRegion.BottomRight.X - _cropRegion.TopLeft.X, GridUnitType.Pixel));
                     Col2.SetValue(ColumnDefinition.WidthProperty, new GridLength(1, GridUnitType.Star));
                 }
@@ -96,18 +92,27 @@ namespace ScreenshotApp {
 
             var mousePos = e.GetPosition(this);
 
-            _cropRegion.X1 = (int) mousePos.X;
-            _cropRegion.Y1 = (int) mousePos.Y;
+            _cropRegion.X1 = (float) mousePos.X;
+            _cropRegion.Y1 = (float) mousePos.Y;
             _timer.Enabled = true;
         }
 
         private void StopDrawRect(object sender, MouseButtonEventArgs e) {
             _timer.Enabled = false;
 
-            _snip.Crop(_cropRegion);
+            if (_cropRegion.Width > 0 && _cropRegion.Height > 0) {
+                _snip.Crop((Box) _cropRegion);
+                Enqueue(_snip);
 
-            Enqueue(_snip);
-            Close();
+                Close();
+            } else {
+                Close();
+
+                if (_cropRegion.Width <= 0)
+                    CustomMessageBox.ShowOK("Your snip had a width of 0, so it was not taken.", "Error", "OK");
+                else // height is <= 0
+                    CustomMessageBox.ShowOK("Your snip had a height of 0, so it was not taken.", "Error", "OK");
+            }
         }
     }
 }

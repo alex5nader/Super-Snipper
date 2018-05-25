@@ -2,10 +2,10 @@
 
 namespace SuperSnipper {
     /// <summary>
-    /// Interaction logic for HelpWindow.xaml
+    /// Interaction logic for Settings.xaml
     /// </summary>
-    public partial class HelpWindow : Window {
-        public HelpWindow() {
+    public partial class Settings : Window {
+        public Settings() {
             InitializeComponent();
         }
     }

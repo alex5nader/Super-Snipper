@@ -1,11 +1,23 @@
-﻿<Window x:Class="ScreenshotApp.PreviewWindow"
+﻿<Window x:Class="SuperSnipper.PreviewWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ScreenshotApp"
+        xmlns:local="clr-namespace:SuperSnipper"
         mc:Ignorable="d"
         Title="PreviewWindow" SizeToContent="WidthAndHeight" Background="Transparent"
         WindowStyle="SingleBorderWindow">
+    <Window.Resources>
+        <RoutedUICommand x:Key="SaveCommand"/>
+        <RoutedUICommand x:Key="CopyCommand"/>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource SaveCommand}" Executed="SaveSnip"/>
+        <CommandBinding Command="{StaticResource CopyCommand}" Executed="CopySnip"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="S" Modifiers="Control" Command="{StaticResource SaveCommand}"/>
+        <KeyBinding Key="C" Modifiers="Control" Command="{StaticResource CopyCommand}"/>
+    </Window.InputBindings>
     <Image Name="Preview" Stretch="None"/>
 </Window>

@@ -60,6 +60,10 @@ namespace Function.Snip {
             item.Dispose();
         }
 
+        public int IndexOf(Snip item) {
+            return _snips.IndexOf(item);
+        }
+
         public void ForEach(Action<Snip> operation) {
             _snips.ForEach(operation);
         }

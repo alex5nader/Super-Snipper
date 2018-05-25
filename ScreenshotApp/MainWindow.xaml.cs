@@ -1,34 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Windows.Forms;
-using Function;
+using System.Windows.Input;
 using Function.Snip;
 using Function.Util;
+using WPFCustomMessageBox;
 using Clipboard = System.Windows.Clipboard;
-using MessageBox = System.Windows.MessageBox;
 using MessageBoxResult = System.Windows.MessageBoxResult;
 
-namespace ScreenshotApp {
+namespace SuperSnipper {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -95,16 +77,18 @@ namespace ScreenshotApp {
         }
 
         private void IncrementDelay(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs) {
-            if (IudDelay.Value is int delay)
-                ++IudDelay.Value;
-            else
+            if (IudDelay.Value is int delay) {
+                if (delay < IudDelay.Maximum)
+                    ++IudDelay.Value;
+            } else
                 IudDelay.Value = 1; // treat a null value as 0 and just increment it to 1
         }
 
         private void DecrementDelay(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs) {
-            if (IudDelay.Value is int delay)
-                --IudDelay.Value;
-            else
+            if (IudDelay.Value is int delay) {
+                if (delay > IudDelay.Minimum)
+                    --IudDelay.Value;
+            } else
                 IudDelay.Value = 0; // treat a null value as 0 which is the minimum delay, but go ahead and convert it to 0
         }
 
@@ -124,7 +108,7 @@ namespace ScreenshotApp {
 
                 var number = 1;
                 foreach (var snip in _snips) {
-                    snip.Screenshot.Save(path + $@"\Snip {number++}.png", ImageFormat.Png);
+                    snip.Screenshot.Save(path + $@"\Snip_{number++}.png", ImageFormat.Png);
                 }
             }
         }
@@ -139,10 +123,20 @@ namespace ScreenshotApp {
         }
 
         private async void ImgurExport(object sender, ExecutedRoutedEventArgs e) {
-            //var url = await _snips[0].ImgurExport();
-            //var result = CustomMessageBox.Show();
-            //if (result == MessageBoxResult.OK)
-            //    Clipboard.SetDataObject(url);
+            var url = await _snips[0].ImgurExport();
+            var result = CustomMessageBox.ShowYesNo(
+                $"Image exported successfully. URL is {url}",
+                "Success!",
+                "Copy URL",
+                "Don't copy URL"
+            );
+            if (result == MessageBoxResult.Yes)
+                Clipboard.SetDataObject(url);
+        }
+
+        private void ShowSettingsWindow(object sender, ExecutedRoutedEventArgs e) {
+            var settings = new Settings();
+            settings.ShowDialog();
         }
     }
 }
